@@ -194,10 +194,7 @@ class atualizar():
     global ID_SQL
 
     #Seria o INIT mas a função fora está funcionando bwem - TESTAR APLICAÇÃO SEM ESSA LINHA
-    def __init__(self,*args,**argvs): 
-        super(atualizar,self).__init__(*args,**argvs)
-        self.ui.setupUi(self)
-        self.mostrar_dados()
+
     #Mostrar todas as reservas
     def mostrar_dados():
         connectar()
@@ -302,16 +299,18 @@ class atualizar():
     #BOTÃO ATUALIZAR
     def atualizar_reserva():
         cursor = banco.cursor()
-        try:
-            banco = mysql.connector.connect()
-            print("Connection established")
-        except mysql.connector.Error as err:
-            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-                print("Something is wrong with the user name or password")
-            elif err.errno == errorcode.ER_BAD_DB_ERROR:
-                print("Database does not exist")
-            else:
-                 print(err)  
+        connectar()
+
+        #try:
+            
+        #    print("Connection established")
+        #except mysql.connector.Error as err:
+        #    if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+        #        print("Something is wrong with the user name or password")
+        #    elif err.errno == errorcode.ER_BAD_DB_ERROR:
+        #        print("Database does not exist")
+        #    else:
+        #         print(err)  
         
 
         N_Solicitacao = aba_atualiza.lineEdit_4.text()
