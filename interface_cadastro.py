@@ -217,7 +217,6 @@ class atualizar():
 
     #Pesquisar por CPF do condutor
     def pesquisa_id_aba_atualizar(): 
-        cursor = banco.cursor()
         connectar()
         dbname = aba_atualiza.lineEdit.text()
         cursor = banco.cursor()
@@ -298,8 +297,8 @@ class atualizar():
 
     #BOTÃO ATUALIZAR
     def atualizar_reserva():
-        cursor = banco.cursor()
         connectar()
+        cursor = banco.cursor()
 
         #try:
             
@@ -331,8 +330,8 @@ class atualizar():
         status_reserva = aba_atualiza.lineEdit_19.text()
         Tipo_retirada = aba_atualiza.lineEdit_20.text()
 
-        banco.reconnect()
-        cursor.execute ("UPDATE reserva_acompanhamento SET nmr_solicitacao_dynamics = %s; nome_solicitante = %s;assistencia_id_juvo = %s;CPF_Condutor = %s;nome_condutor = %s;chassi_veiculo_condutor = %s;nome_locadora = %s;nmr_resv_juvo = %s;categoria_solicitada = %s;data_ret = %s;data_dev = %s;qnt_diarias_iniciais = %s;mod_vei = %s;nome_cnss = %s;tipo_retirada = %s;Qt_dias_totais = %s; status_reserva = %s WHERE cpf_condutor = %s;", (N_Solicitacao,Solicitante,Assistencia,CPF_Condutor,Nome_Condutor,Chassi,Locadora,N_Reserva,Categoria,Data_Retirada,Data_Devolucao,Qnt_diarias_iniciais,Modelo_Veiculo,Concessionaria,Tipo_retirada,Qtd_diarias_totais,status_reserva,CPF_Condutor))
+        comandoSQL_6 =  ("UPDATE reserva_acompanhamento SET nmr_solicitacao_dynamics = %s; nome_solicitante = %s;assistencia_id_juvo = %s;CPF_Condutor = %s;nome_condutor = %s;chassi_veiculo_condutor = %s;nome_locadora = %s;nmr_resv_juvo = %s;categoria_solicitada = %s;data_ret = %s;data_dev = %s;qnt_diarias_iniciais = %s;mod_vei = %s;nome_cnss = %s;tipo_retirada = %s;Qt_dias_totais = %s; status_reserva = %s WHERE cpf_condutor = %s;", (N_Solicitacao,Solicitante,Assistencia,CPF_Condutor,Nome_Condutor,Chassi,Locadora,N_Reserva,Categoria,Data_Retirada,Data_Devolucao,Qnt_diarias_iniciais,Modelo_Veiculo,Concessionaria,Tipo_retirada,Qtd_diarias_totais,status_reserva,CPF_Condutor))
+        cursor.execute(comandoSQL_6)
         banco.commit()
         cursor.close()
         banco.close()
