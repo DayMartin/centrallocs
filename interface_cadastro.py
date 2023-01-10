@@ -248,7 +248,7 @@ class atualizar():
         Qtd_diarias_totais = aba_atualiza.tableWidget.item(id_linha_selecionada,15).text()
         status_reserva = aba_atualiza.tableWidget.item(id_linha_selecionada,16).text()
         tipo_retirada = aba_atualiza.tableWidget.item(id_linha_selecionada,17).text()
-        #sql = aba_atualiza.tableWidget.item(id_linha_selecionada,18).text()
+
 
 
         aba_atualiza.lineEdit_4.setText(N_Solicitacao)
@@ -268,7 +268,7 @@ class atualizar():
         aba_atualiza.lineEdit_18.setText(Qtd_diarias_totais)
         aba_atualiza.lineEdit_19.setText(status_reserva)
         aba_atualiza.lineEdit_20.setText(tipo_retirada)
-        #aba_atualiza.lineEdit_21.setText(sql)
+
 
        
     #Pega o id da linha
@@ -298,25 +298,29 @@ class atualizar():
         Qtd_diarias_totais = aba_atualiza.lineEdit_18.text()
         status_reserva = aba_atualiza.lineEdit_19.text()
         Tipo_retirada = aba_atualiza.lineEdit_20.text()
-        #sql_id = aba_atualiza.lineEdit_21.text()
 
-        comandoSQL_3 = ("""UPDATE reserva_acompanhamento SET  nmr_solicitacao_dynamics = {},
-            nome_solicitante = {},
-            assistencia_id_juvo = {},
-            nome_condutor = {},
-            chassi_veiculo_condutor = {},
-            nome_locadora = {},
-            nmr_resv_juvo = {},
-            categoria_solicitada = {},
-            data_ret = {},
-            data_dev = {},
-            qnt_diarias_iniciais = {},
-            mod_vei = {},
-            nome_cnss = {},
-            tipo_retirada = {},
-            Qt_dias_totais = {},
-            status_reserva = {},
-            WHERE id_reserva_sql = {}""").format(N_Solicitacao,Solicitante,Assistencia,Nome_Condutor,Chassi,Locadora,N_Reserva,Categoria,Data_Retirada,Data_Devolucao,Qnt_diarias_iniciais,Modelo_Veiculo,Concessionaria,Tipo_retirada,Qtd_diarias_totais,status_reserva)
+
+        comandoSQL_3 = ("""UPDATE reserva_acompanhamento SET  
+            nmr_solicitacao_dynamics = %s,
+            nome_solicitante = %s,
+            assistencia_id_juvo = %s,
+            CPF_Condutor = %s,
+            nome_condutor = %s,
+            chassi_veiculo_condutor = %s,
+            nome_locadora = %s,
+            nmr_resv_juvo = %s,
+            categoria_solicitada = %s,
+            data_ret = %s,
+            data_dev = %s,
+            qnt_diarias_iniciais = %s,
+            mod_vei = %s,
+            nome_cnss = %s,
+            tipo_retirada = %s,
+            Qt_dias_totais = %s,
+            status_reserva = %s,
+            WHERE id_reserva_sql = %s""")
+        dados_preencher = (str(N_Solicitacao),str(Solicitante),str(Assistencia),str(CPF_Condutor),str(Nome_Condutor),str(Chassi),str(Locadora),str(N_Reserva),str(Categoria),str(Data_Retirada),str(Data_Devolucao),str(Qnt_diarias_iniciais),str(Modelo_Veiculo),str(Concessionaria),str(Tipo_retirada),str(Qtd_diarias_totais),str(status_reserva),)
+        
         print("Deu certo")
         cursor.execute(comandoSQL_3)
         banco.commit()
