@@ -237,8 +237,8 @@ class atualizar():
 
     #Seleciona  a linha clicada perante a tabela 
     def Pega_selecao_do_banco():
-        cursor = banco.cursor()
         connectar()
+        cursor = banco.cursor()
         return aba_atualiza.tableWidget.currentRow()
         cursor.close()
         banco.close()
@@ -248,6 +248,7 @@ class atualizar():
         connectar()
         id_linha_selecionada = Pega_selecao_do_banco()
         print(id_linha_selecionada)
+        
         N_Solicitacao = aba_atualiza.tableWidget.item(id_linha_selecionada,1).text()
         Solicitante =  aba_atualiza.tableWidget.item(id_linha_selecionada,2).text()
         Assistencia =  aba_atualiza.tableWidget.item(id_linha_selecionada,3).text()
@@ -280,9 +281,9 @@ class atualizar():
         aba_atualiza.lineEdit_15.setText(Qnt_diarias_iniciais)
         aba_atualiza.lineEdit_16.setText(Modelo_Veiculo)
         aba_atualiza.lineEdit_17.setText(Concessionaria)
-        aba_atualiza.lineEdit_18.setText(Qtd_diarias_totais)
+        aba_atualiza.lineEdit_18.setText(tipo_retirada)
         aba_atualiza.lineEdit_19.setText(status_reserva)
-        aba_atualiza.lineEdit_20.setText(tipo_retirada)
+        aba_atualiza.lineEdit_20.setText(Qtd_diarias_totais)
         
 
     #Pega o id da linha
