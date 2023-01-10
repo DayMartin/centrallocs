@@ -3,10 +3,11 @@ import mysql.connector
 from mysql.connector import Error
 from PyQt5.QtWidgets import QDialog, QApplication
 from PyQt5.QtPrintSupport import *
+import datetime
 
 import mysql.connector as mc
 from PyQt5.QtWidgets import QTableWidgetItem
-
+from mysql.connector import errorcode
 
 
 def connectar():
@@ -142,6 +143,9 @@ def funcao_principal():
     formulario.lineEdit_23.setText("")
     formulario.lineEdit_22.setText("")
 
+    cursor.close()
+    banco.close()
+
 #ABA DE ACOMPANHAMENTO 
 def chama_aba_acompanhamento():
     connectar()
@@ -158,6 +162,8 @@ def chama_aba_acompanhamento():
     for i in range(0,len(dados_lidos)):
         for j in range(0,18):
             acompanhamento_reserva.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(str(dados_lidos[i][j])))
+    cursor.close()
+    banco.close()
 
 #PESQUISAR POR CPF
 def pesquisa_id(): 
@@ -175,6 +181,8 @@ def pesquisa_id():
             acompanhamento_reserva.tableWidget.insertRow(row_number)
             for column_number, data in enumerate(row_data):
                 acompanhamento_reserva.tableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+        banco.close()
+        cursor.close()
 
 class atualizar():  
     global mostrar_dados
@@ -206,8 +214,13 @@ class atualizar():
         for i in range(0,len(dados_lidos)):
             for j in range(0,18):
                 aba_atualiza.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(str(dados_lidos[i][j])))
+
+        cursor.close()
+        banco.close()
+
     #Pesquisar por CPF do condutor
     def pesquisa_id_aba_atualizar(): 
+        cursor = banco.cursor()
         connectar()
         dbname = aba_atualiza.lineEdit.text()
         cursor = banco.cursor()
@@ -222,10 +235,18 @@ class atualizar():
             aba_atualiza.tableWidget.insertRow(row_number)
             for column_number, data in enumerate(row_data):
                 aba_atualiza.tableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+        cursor.close()
+        banco.close()
+
     #Seleciona  a linha clicada perante a tabela 
     def Pega_selecao_do_banco():
+        cursor = banco.cursor()
         connectar()
         return aba_atualiza.tableWidget.currentRow()
+        cursor.close()
+        banco.close()
+
     #Preencher os campos para edição automaticamente após clicar na linha
     def Preencher_campos_auto():
         connectar()
@@ -249,8 +270,6 @@ class atualizar():
         status_reserva = aba_atualiza.tableWidget.item(id_linha_selecionada,16).text()
         tipo_retirada = aba_atualiza.tableWidget.item(id_linha_selecionada,17).text()
 
-
-
         aba_atualiza.lineEdit_4.setText(N_Solicitacao)
         aba_atualiza.lineEdit_5.setText(Solicitante)
         aba_atualiza.lineEdit_6.setText(Assistencia)
@@ -268,19 +287,33 @@ class atualizar():
         aba_atualiza.lineEdit_18.setText(Qtd_diarias_totais)
         aba_atualiza.lineEdit_19.setText(status_reserva)
         aba_atualiza.lineEdit_20.setText(tipo_retirada)
+        
+        banco.close()
 
-
-       
     #Pega o id da linha
     def pega_id_tabela(): 
         connectar()
+        cursor = banco.cursor()
         valor = aba_atualiza.tableWidget.item(Pega_selecao_do_banco(), 0)
         return valor.text() if not valor is None else valor 
+        cursor.close()
+        banco.close()
+
     #BOTÃO ATUALIZAR
     def atualizar_reserva():
+        cursor = banco.cursor()
+        try:
+            banco = mysql.connector.connect()
+            print("Connection established")
+        except mysql.connector.Error as err:
+            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+                print("Something is wrong with the user name or password")
+            elif err.errno == errorcode.ER_BAD_DB_ERROR:
+                print("Database does not exist")
+            else:
+                 print(err)  
+        
 
-        connectar()
-        cursor = banco.cursor()   
         N_Solicitacao = aba_atualiza.lineEdit_4.text()
         Solicitante = aba_atualiza.lineEdit_5.text()
         Assistencia = aba_atualiza.lineEdit_6.text()
@@ -299,31 +332,12 @@ class atualizar():
         status_reserva = aba_atualiza.lineEdit_19.text()
         Tipo_retirada = aba_atualiza.lineEdit_20.text()
 
-
-        comandoSQL_3 = ("""UPDATE reserva_acompanhamento SET  
-            nmr_solicitacao_dynamics = %s,
-            nome_solicitante = %s,
-            assistencia_id_juvo = %s,
-            CPF_Condutor = %s,
-            nome_condutor = %s,
-            chassi_veiculo_condutor = %s,
-            nome_locadora = %s,
-            nmr_resv_juvo = %s,
-            categoria_solicitada = %s,
-            data_ret = %s,
-            data_dev = %s,
-            qnt_diarias_iniciais = %s,
-            mod_vei = %s,
-            nome_cnss = %s,
-            tipo_retirada = %s,
-            Qt_dias_totais = %s,
-            status_reserva = %s,
-            WHERE id_reserva_sql = %s """)
-        dados_preencher = (str(N_Solicitacao),str(Solicitante),str(Assistencia),str(CPF_Condutor),str(Nome_Condutor),str(Chassi),str(Locadora),str(N_Reserva),str(Categoria),str(Data_Retirada),str(Data_Devolucao),str(Qnt_diarias_iniciais),str(Modelo_Veiculo),str(Concessionaria),str(Tipo_retirada),str(Qtd_diarias_totais),str(status_reserva))
-        
-        print("Deu certo")
-        cursor.execute(comandoSQL_3,dados_preencher)
+        banco.reconnect()
+        cursor.execute ("UPDATE reserva_acompanhamento SET nmr_solicitacao_dynamics = %s; nome_solicitante = %s;assistencia_id_juvo = %s;CPF_Condutor = %s;nome_condutor = %s;chassi_veiculo_condutor = %s;nome_locadora = %s;nmr_resv_juvo = %s;categoria_solicitada = %s;data_ret = %s;data_dev = %s;qnt_diarias_iniciais = %s;mod_vei = %s;nome_cnss = %s;tipo_retirada = %s;Qt_dias_totais = %s; status_reserva = %s WHERE cpf_condutor = %s;", (N_Solicitacao,Solicitante,Assistencia,CPF_Condutor,Nome_Condutor,Chassi,Locadora,N_Reserva,Categoria,Data_Retirada,Data_Devolucao,Qnt_diarias_iniciais,Modelo_Veiculo,Concessionaria,Tipo_retirada,Qtd_diarias_totais,status_reserva,CPF_Condutor))
         banco.commit()
+        cursor.close()
+        banco.close()
+        print("Updated",cursor.rowcount,"row(s) of data.")
             
 
 import sys 
