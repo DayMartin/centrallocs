@@ -318,11 +318,11 @@ class atualizar():
             tipo_retirada = %s,
             Qt_dias_totais = %s,
             status_reserva = %s,
-            WHERE id_reserva_sql = %s""")
-        dados_preencher = (str(N_Solicitacao),str(Solicitante),str(Assistencia),str(CPF_Condutor),str(Nome_Condutor),str(Chassi),str(Locadora),str(N_Reserva),str(Categoria),str(Data_Retirada),str(Data_Devolucao),str(Qnt_diarias_iniciais),str(Modelo_Veiculo),str(Concessionaria),str(Tipo_retirada),str(Qtd_diarias_totais),str(status_reserva),)
+            WHERE id_reserva_sql = %s """)
+        dados_preencher = (str(N_Solicitacao),str(Solicitante),str(Assistencia),str(CPF_Condutor),str(Nome_Condutor),str(Chassi),str(Locadora),str(N_Reserva),str(Categoria),str(Data_Retirada),str(Data_Devolucao),str(Qnt_diarias_iniciais),str(Modelo_Veiculo),str(Concessionaria),str(Tipo_retirada),str(Qtd_diarias_totais),str(status_reserva))
         
         print("Deu certo")
-        cursor.execute(comandoSQL_3)
+        cursor.execute(comandoSQL_3,dados_preencher)
         banco.commit()
             
 
