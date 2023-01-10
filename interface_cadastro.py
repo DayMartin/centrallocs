@@ -246,6 +246,7 @@ def Pega_selecao_do_banco():
 def Preencher_campos_auto():
         connectar()
         cursor = banco.cursor()
+        global id_linha_selecionada
         id_linha_selecionada = Pega_selecao_do_banco()
         print(id_linha_selecionada)
         
@@ -330,8 +331,14 @@ def atualizar_reserva():
         status_reserva = aba_atualiza.lineEdit_19.text()
         Tipo_retirada = aba_atualiza.lineEdit_20.text()
 
-        comandoSQL_6 =  ("UPDATE reserva_acompanhamento SET nmr_solicitacao_dynamics = %s; nome_solicitante = %s;assistencia_id_juvo = %s;CPF_Condutor = %s;nome_condutor = %s;chassi_veiculo_condutor = %s;nome_locadora = %s;nmr_resv_juvo = %s;categoria_solicitada = %s;data_ret = %s;data_dev = %s;qnt_diarias_iniciais = %s;mod_vei = %s;nome_cnss = %s;tipo_retirada = %s;Qt_dias_totais = %s; status_reserva = %s WHERE chassi_veiculo_condutor = {};".format(Chassi), (N_Solicitacao,Solicitante,Assistencia,CPF_Condutor,Nome_Condutor,Chassi,Locadora,N_Reserva,Categoria,Data_Retirada,Data_Devolucao,Qnt_diarias_iniciais,Modelo_Veiculo,Concessionaria,Tipo_retirada,Qtd_diarias_totais,status_reserva))
-        cursor.execute(*comandoSQL_6)
+
+        cursor.execute("SELECT id_reserva_sql FROM reserva_acompanhamento")
+        dados_lidos = cursor.fetchall()
+        valor_id = dados_lidos[id_linha_selecionada][0]
+
+        comandoSQL_6 = ("UPDATE reserva_acompanhamento SET nmr_solicitacao_dynamics = '{}', nome_solicitante = '{}', assistencia_id_juvo = '{}', CPF_Condutor = '{}', nome_condutor = '{}', chassi_veiculo_condutor = '{}', nome_locadora = '{}', nmr_resv_juvo = '{}', categoria_solicitada = '{}', data_ret = '{}', data_dev = '{}', qnt_diarias_iniciais = '{}', mod_vei = '{}', nome_cnss = '{}', tipo_retirada = '{}', Qtd_dias_totais = '{}', status_reserva = '{}' WHERE id_reserva_sql = {}".format(N_Solicitacao,Solicitante,Assistencia,CPF_Condutor,Nome_Condutor,Chassi,Locadora,N_Reserva,Categoria,Data_Retirada,Data_Devolucao,Qnt_diarias_iniciais,Modelo_Veiculo,Concessionaria,Tipo_retirada,Qtd_diarias_totais,status_reserva,str(valor_id)))
+        cursor.execute(comandoSQL_6)
+        banco.commit()
         print("Updated",cursor.rowcount,"row(s) of data.")
         cursor.close()
         banco.close()
@@ -339,6 +346,7 @@ def atualizar_reserva():
 def closeEvent():
     connectar()
     cursor = banco.cursor()
+    aba_atualiza.lineEdit.setText("")
     aba_atualiza.lineEdit_4.setText("")
     aba_atualiza.lineEdit_5.setText("")
     aba_atualiza.lineEdit_6.setText("")
