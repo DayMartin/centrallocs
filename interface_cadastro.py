@@ -4,6 +4,7 @@ from mysql.connector import Error
 from PyQt5.QtWidgets import QDialog, QApplication
 from PyQt5.QtPrintSupport import *
 import datetime
+from PyQt5.QtWidgets import QMessageBox
 
 import mysql.connector as mc
 from PyQt5.QtWidgets import QTableWidgetItem
@@ -340,6 +341,7 @@ def atualizar_reserva():
         cursor.execute(comandoSQL_6)
         banco.commit()
         print("Updated",cursor.rowcount,"row(s) of data.")
+        QMessageBox.warning(QMessageBox(), "Muito Bom", "Atualizado com sucesso")
         cursor.close()
         banco.close()
 
@@ -383,12 +385,6 @@ aba_atualiza.pushButton_3.clicked.connect(closeEvent)
 acompanhamento_reserva.pushButton.clicked.connect(pesquisa_id)
 acompanhamento_reserva.pushButton_7.clicked.connect(mostrar_dados)
 aba_atualiza.tableWidget.itemSelectionChanged.connect(Preencher_campos_auto)
-
-
-
-
-
-
 
 formulario.show()
 app.exec()
