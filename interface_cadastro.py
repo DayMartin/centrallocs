@@ -184,19 +184,18 @@ def pesquisa_id():
         banco.close()
         cursor.close()
 
-class atualizar():  
-    global mostrar_dados
-    global pesquisa_id_aba_atualizar
-    global Preencher_campos_auto
-    global Pega_selecao_do_banco
-    global atualizar_reserva
-    global pega_id_tabela
-    global ID_SQL
-
-    #Seria o INIT mas a função fora está funcionando bwem - TESTAR APLICAÇÃO SEM ESSA LINHA
+#class atualizar():  
+    #global mostrar_dados
+    #global pesquisa_id_aba_atualizar
+    #global Preencher_campos_auto
+    #global Pega_selecao_do_banco
+    #global atualizar_reserva
+    #global pega_id_tabela
+    #global ID_SQL
+    #global closeEvent
 
     #Mostrar todas as reservas
-    def mostrar_dados():
+def mostrar_dados():
         connectar()
         aba_atualiza.show()
         cursor = banco.cursor()
@@ -216,7 +215,7 @@ class atualizar():
         banco.close()
 
     #Pesquisar por CPF do condutor
-    def pesquisa_id_aba_atualizar(): 
+def pesquisa_id_aba_atualizar(): 
         connectar()
         dbname = aba_atualiza.lineEdit.text()
         cursor = banco.cursor()
@@ -236,7 +235,7 @@ class atualizar():
         banco.close()
 
     #Seleciona  a linha clicada perante a tabela 
-    def Pega_selecao_do_banco():
+def Pega_selecao_do_banco():
         connectar()
         cursor = banco.cursor()
         return aba_atualiza.tableWidget.currentRow()
@@ -244,8 +243,9 @@ class atualizar():
         banco.close()
 
     #Preencher os campos para edição automaticamente após clicar na linha
-    def Preencher_campos_auto():
+def Preencher_campos_auto():
         connectar()
+        cursor = banco.cursor()
         id_linha_selecionada = Pega_selecao_do_banco()
         print(id_linha_selecionada)
         
@@ -284,19 +284,19 @@ class atualizar():
         aba_atualiza.lineEdit_18.setText(tipo_retirada)
         aba_atualiza.lineEdit_19.setText(status_reserva)
         aba_atualiza.lineEdit_20.setText(Qtd_diarias_totais)
-        
+        banco.close()
 
     #Pega o id da linha
-    def pega_id_tabela(): 
+def pega_id_tabela(): 
         connectar()
         cursor = banco.cursor()
         valor = aba_atualiza.tableWidget.item(Pega_selecao_do_banco(), 0)
         return valor.text() if not valor is None else valor 
-        cursor.close()
+        cursor = banco.cursor()
         banco.close()
 
     #BOTÃO ATUALIZAR
-    def atualizar_reserva():
+def atualizar_reserva():
         connectar()
         cursor = banco.cursor()
 
@@ -310,8 +310,7 @@ class atualizar():
         #        print("Database does not exist")
         #    else:
         #         print(err)  
-        
-        dbcpf = aba_atualiza.lineEdit_7.text()
+    
 
         N_Solicitacao = aba_atualiza.lineEdit_4.text()
         Solicitante = aba_atualiza.lineEdit_5.text()
@@ -331,10 +330,35 @@ class atualizar():
         status_reserva = aba_atualiza.lineEdit_19.text()
         Tipo_retirada = aba_atualiza.lineEdit_20.text()
 
-        comandoSQL_6 =  ("UPDATE reserva_acompanhamento SET nmr_solicitacao_dynamics = %s; nome_solicitante = %s;assistencia_id_juvo = %s;CPF_Condutor = %s;nome_condutor = %s;chassi_veiculo_condutor = %s;nome_locadora = %s;nmr_resv_juvo = %s;categoria_solicitada = %s;data_ret = %s;data_dev = %s;qnt_diarias_iniciais = %s;mod_vei = %s;nome_cnss = %s;tipo_retirada = %s;Qt_dias_totais = %s; status_reserva = %s WHERE cpf_condutor = {};".format(dbcpf), (N_Solicitacao,Solicitante,Assistencia,CPF_Condutor,Nome_Condutor,Chassi,Locadora,N_Reserva,Categoria,Data_Retirada,Data_Devolucao,Qnt_diarias_iniciais,Modelo_Veiculo,Concessionaria,Tipo_retirada,Qtd_diarias_totais,status_reserva))
+        comandoSQL_6 =  ("UPDATE reserva_acompanhamento SET nmr_solicitacao_dynamics = %s; nome_solicitante = %s;assistencia_id_juvo = %s;CPF_Condutor = %s;nome_condutor = %s;chassi_veiculo_condutor = %s;nome_locadora = %s;nmr_resv_juvo = %s;categoria_solicitada = %s;data_ret = %s;data_dev = %s;qnt_diarias_iniciais = %s;mod_vei = %s;nome_cnss = %s;tipo_retirada = %s;Qt_dias_totais = %s; status_reserva = %s WHERE chassi_veiculo_condutor = {};".format(Chassi), (N_Solicitacao,Solicitante,Assistencia,CPF_Condutor,Nome_Condutor,Chassi,Locadora,N_Reserva,Categoria,Data_Retirada,Data_Devolucao,Qnt_diarias_iniciais,Modelo_Veiculo,Concessionaria,Tipo_retirada,Qtd_diarias_totais,status_reserva))
         cursor.execute(*comandoSQL_6)
         print("Updated",cursor.rowcount,"row(s) of data.")
-            
+        cursor.close()
+        banco.close()
+
+def closeEvent():
+    connectar()
+    cursor = banco.cursor()
+    aba_atualiza.lineEdit_4.setText("")
+    aba_atualiza.lineEdit_5.setText("")
+    aba_atualiza.lineEdit_6.setText("")
+    aba_atualiza.lineEdit_7.setText("")
+    aba_atualiza.lineEdit_8.setText("")
+    aba_atualiza.lineEdit_9.setText("")
+    aba_atualiza.lineEdit_10.setText("")
+    aba_atualiza.lineEdit_11.setText("")
+    aba_atualiza.lineEdit_12.setText("")
+    aba_atualiza.lineEdit_13.setText("")
+    aba_atualiza.lineEdit_14.setText("")
+    aba_atualiza.lineEdit_15.setText("")
+    aba_atualiza.lineEdit_16.setText("")
+    aba_atualiza.lineEdit_17.setText("")
+    aba_atualiza.lineEdit_18.setText("")
+    aba_atualiza.lineEdit_19.setText("")
+    aba_atualiza.lineEdit_20.setText("")
+    aba_atualiza.close()
+    cursor.close() 
+    banco.close()
 
 import sys 
 
@@ -347,9 +371,13 @@ formulario.pushButton.clicked.connect(funcao_principal)
 formulario.pushButton_2.clicked.connect(chama_aba_acompanhamento)
 aba_atualiza.pushButton.clicked.connect(pesquisa_id_aba_atualizar)
 aba_atualiza.pushButton_2.clicked.connect(atualizar_reserva)
+aba_atualiza.pushButton_3.clicked.connect(closeEvent)
 acompanhamento_reserva.pushButton.clicked.connect(pesquisa_id)
 acompanhamento_reserva.pushButton_7.clicked.connect(mostrar_dados)
 aba_atualiza.tableWidget.itemSelectionChanged.connect(Preencher_campos_auto)
+
+
+
 
 
 

@@ -231,7 +231,7 @@ color: rgb(255, 255, 255);</string>
      </font>
     </property>
     <property name="text">
-     <string>Limpar</string>
+     <string>Cancelar</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_4">
