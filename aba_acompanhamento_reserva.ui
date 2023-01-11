@@ -319,7 +319,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Voltar</string>
+     <string>Cancelar</string>
     </property>
    </widget>
   </widget>

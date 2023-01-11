@@ -370,6 +370,13 @@ def closeEvent():
     cursor.close() 
     banco.close()
 
+def mostrar_todas_reservas():
+    acompanhamento_reserva.lineEdit.setText("")
+    chama_aba_acompanhamento()
+
+def botaocancelar():
+    acompanhamento_reserva.close()
+
 import sys 
 
 app = QtWidgets.QApplication([])
@@ -382,9 +389,12 @@ formulario.pushButton_2.clicked.connect(chama_aba_acompanhamento)
 aba_atualiza.pushButton.clicked.connect(pesquisa_id_aba_atualizar)
 aba_atualiza.pushButton_2.clicked.connect(atualizar_reserva)
 aba_atualiza.pushButton_3.clicked.connect(closeEvent)
+acompanhamento_reserva.pushButton_6.clicked.connect(mostrar_todas_reservas)
 acompanhamento_reserva.pushButton.clicked.connect(pesquisa_id)
 acompanhamento_reserva.pushButton_7.clicked.connect(mostrar_dados)
+acompanhamento_reserva.pushButton_3.clicked.connect(botaocancelar)
 aba_atualiza.tableWidget.itemSelectionChanged.connect(Preencher_campos_auto)
+
 
 formulario.show()
 app.exec()
