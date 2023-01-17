@@ -1,6 +1,7 @@
-from PyQt5 import uic, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import mysql.connector
 from mysql.connector import Error
+import PyQt5.QtWidgets
 from PyQt5.QtWidgets import QDialog, QApplication
 from PyQt5.QtPrintSupport import *
 import datetime
@@ -10,14 +11,29 @@ import mysql.connector as mc
 from PyQt5.QtWidgets import QTableWidgetItem
 from mysql.connector import errorcode
 
+from sqlalchemy import create_engine
+import pymysql
+
+import sys
+
+qtCreatorFile = "aba_cadastro.ui" #Esse é o arquivo .ui gerado pelo QtDesigner
+Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
+
+class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
+    def __init__(self):
+        QtWidgets.QMainWindow.__init__(self)
+        Ui_MainWindow.__init__(self)
+        self.setupUi(self)
+
 
 def connectar():
         global banco 
         banco = mysql.connector.connect(
-            host='localhost',
-            user='root',
-            passwd='',
+           host= '35.237.99.182',
+           user='dinahdoria',
+           passwd='teste123',
             database='centralloc')
+
 
 #ABA DE COTAÇÃO 
 def funcao_principal():
@@ -146,6 +162,8 @@ def funcao_principal():
 
     cursor.close()
     banco.close()
+
+
 
 #ABA DE ACOMPANHAMENTO 
 def chama_aba_acompanhamento():
@@ -395,9 +413,13 @@ acompanhamento_reserva.pushButton_7.clicked.connect(mostrar_dados)
 acompanhamento_reserva.pushButton_3.clicked.connect(botaocancelar)
 aba_atualiza.tableWidget.itemSelectionChanged.connect(Preencher_campos_auto)
 
-
 formulario.show()
 app.exec()
 
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    window = MyWindow()
+    window.show()
+    sys.exit(app.exec_())
 
 
