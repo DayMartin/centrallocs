@@ -15,6 +15,10 @@ from sqlalchemy import create_engine
 import pymysql
 
 import sys
+import requests
+
+ip_publico = requests.get('https://api.ipify.org/').text
+print(f'IP Publico: {ip_publico}')
 
 qtCreatorFile = "aba_cadastro.ui" #Esse é o arquivo .ui gerado pelo QtDesigner
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
@@ -33,7 +37,6 @@ def connectar():
            user='dinahdoria',
            passwd='teste123',
             database='centralloc')
-
 
 #ABA DE COTAÇÃO 
 def funcao_principal():
@@ -283,8 +286,8 @@ def Preencher_campos_auto():
         Qnt_diarias_iniciais = aba_atualiza.tableWidget.item(id_linha_selecionada,12).text()
         Modelo_Veiculo = aba_atualiza.tableWidget.item(id_linha_selecionada,13).text()
         Concessionaria = aba_atualiza.tableWidget.item(id_linha_selecionada,14).text()
-        Qtd_diarias_totais = aba_atualiza.tableWidget.item(id_linha_selecionada,15).text()
-        status_reserva = aba_atualiza.tableWidget.item(id_linha_selecionada,16).text()
+        status_reserva = aba_atualiza.tableWidget.item(id_linha_selecionada,15).text()
+        Qtd_diarias_totais = aba_atualiza.tableWidget.item(id_linha_selecionada,16).text()
         tipo_retirada = aba_atualiza.tableWidget.item(id_linha_selecionada,17).text()
 
         aba_atualiza.lineEdit_4.setText(N_Solicitacao)
@@ -301,9 +304,9 @@ def Preencher_campos_auto():
         aba_atualiza.lineEdit_15.setText(Qnt_diarias_iniciais)
         aba_atualiza.lineEdit_16.setText(Modelo_Veiculo)
         aba_atualiza.lineEdit_17.setText(Concessionaria)
-        aba_atualiza.lineEdit_18.setText(tipo_retirada)
-        aba_atualiza.lineEdit_19.setText(status_reserva)
-        aba_atualiza.lineEdit_20.setText(Qtd_diarias_totais)
+        aba_atualiza.lineEdit_18.setText(status_reserva)
+        aba_atualiza.lineEdit_19.setText(Qtd_diarias_totais)
+        aba_atualiza.lineEdit_20.setText(tipo_retirada)
         banco.close()
 
     #Pega o id da linha
@@ -346,8 +349,8 @@ def atualizar_reserva():
         Qnt_diarias_iniciais = aba_atualiza.lineEdit_15.text()
         Modelo_Veiculo = aba_atualiza.lineEdit_16.text()
         Concessionaria = aba_atualiza.lineEdit_17.text()
-        Qtd_diarias_totais = aba_atualiza.lineEdit_18.text()
-        status_reserva = aba_atualiza.lineEdit_19.text()
+        status_reserva = aba_atualiza.lineEdit_18.text()
+        Qtd_diarias_totais = aba_atualiza.lineEdit_19.text() 
         Tipo_retirada = aba_atualiza.lineEdit_20.text()
 
 
@@ -355,7 +358,7 @@ def atualizar_reserva():
         dados_lidos = cursor.fetchall()
         valor_id = dados_lidos[id_linha_selecionada][0]
 
-        comandoSQL_6 = ("UPDATE reserva_acompanhamento SET nmr_solicitacao_dynamics = '{}', nome_solicitante = '{}', assistencia_id_juvo = '{}', CPF_Condutor = '{}', nome_condutor = '{}', chassi_veiculo_condutor = '{}', nome_locadora = '{}', nmr_resv_juvo = '{}', categoria_solicitada = '{}', data_ret = '{}', data_dev = '{}', qnt_diarias_iniciais = '{}', mod_vei = '{}', nome_cnss = '{}', tipo_retirada = '{}', Qtd_dias_totais = '{}', status_reserva = '{}' WHERE id_reserva_sql = {}".format(N_Solicitacao,Solicitante,Assistencia,CPF_Condutor,Nome_Condutor,Chassi,Locadora,N_Reserva,Categoria,Data_Retirada,Data_Devolucao,Qnt_diarias_iniciais,Modelo_Veiculo,Concessionaria,Tipo_retirada,Qtd_diarias_totais,status_reserva,str(valor_id)))
+        comandoSQL_6 = ("UPDATE reserva_acompanhamento SET nmr_solicitacao_dynamics = '{}', nome_solicitante = '{}', assistencia_id_juvo = '{}', CPF_Condutor = '{}', nome_condutor = '{}', chassi_veiculo_condutor = '{}', nome_locadora = '{}', nmr_resv_juvo = '{}', categoria_solicitada = '{}', data_ret = '{}', data_dev = '{}', qnt_diarias_iniciais = '{}', mod_vei = '{}', nome_cnss = '{}', tipo_retirada = '{}',   Qtd_dias_totais = '{}', status_reserva = '{}'  WHERE id_reserva_sql = {}".format(N_Solicitacao,Solicitante,Assistencia,CPF_Condutor,Nome_Condutor,Chassi,Locadora,N_Reserva,Categoria,Data_Retirada,Data_Devolucao,Qnt_diarias_iniciais,Modelo_Veiculo,Concessionaria,status_reserva,Qtd_diarias_totais,Tipo_retirada,str(valor_id)))
         cursor.execute(comandoSQL_6)
         banco.commit()
         print("Updated",cursor.rowcount,"row(s) of data.")
